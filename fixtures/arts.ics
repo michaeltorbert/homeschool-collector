@@ -1,0 +1,328 @@
+BEGIN:VCALENDAR
+PRODID:iCalendar-Ruby
+VERSION:2.0
+X-WR-TIMEZONE:America/New_York
+BEGIN:VTIMEZONE
+TZID:America/New_York
+X-LIC-LOCATION:America/New_York
+BEGIN:STANDARD
+DTSTART:20241103T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20250309T020000
+RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+DESCRIPTION:Get ready to be swept away by the powerhouse vocals of Wendy Mo
+ ten! Celebrating icons like Stevie Wonder\, Adele\, and Linda Ronstadt\, W
+ endy brings her genre-defying style to the stage for a night of pure\, una
+ dulterated soul. https://www.fuquay-varina.org/calendar.aspx?EID=9529
+DTEND;TZID=America/New_York:20270312T213000
+DTSTAMP;TZID=America/New_York:20260806T155030
+DTSTART;TZID=America/New_York:20270312T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T155030
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Icons of Jazz: I Wish ft Wendy Moten
+UID:9529
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Danny Sinoff believes that music should move people\, not just 
+ impress them. A veteran of the stage and club circuit\, Sinoff brings over
+  three decades of experience to the Great American Songbook\, treating eve
+ ry performance as an act of honest communication. https://www.fuquay-varin
+ a.org/calendar.aspx?EID=9528
+DTEND;TZID=America/New_York:20270212T213000
+DTSTAMP;TZID=America/New_York:20260819T085208
+DTSTART;TZID=America/New_York:20270212T193000
+LAST-MODIFIED;TZID=America/New_York:20260819T085208
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Icons of Jazz: Make Someone Happy ft. Danny Sinoff
+UID:9528
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Chr
+ istmas on December 24\, 25\, and 28. https://www.fuquay-varina.org/calenda
+ r.aspx?EID=9373
+DTEND;TZID=America/New_York:20261228T170000
+DTSTAMP;TZID=America/New_York:20251103T165500
+DTSTART;TZID=America/New_York:20261228T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165500
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Christmas
+UID:9373
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Chr
+ istmas on December 24\, 25\, and 28. https://www.fuquay-varina.org/calenda
+ r.aspx?EID=9372
+DTEND;TZID=America/New_York:20261225T170000
+DTSTAMP;TZID=America/New_York:20251103T165426
+DTSTART;TZID=America/New_York:20261224T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165426
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Christmas
+UID:9372
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Bring some sparkle to your holiday season with the Gerald Parke
+ r Jazz Orchestra. An Arts Center staple since 2019\, GPJO transforms the t
+ heatre into a festive wonderland of sound. https://www.fuquay-varina.org/c
+ alendar.aspx?EID=9527
+DTEND;TZID=America/New_York:20261219T213000
+DTSTAMP;TZID=America/New_York:20260806T154409
+DTSTART;TZID=America/New_York:20261219T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T154409
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Gerald Parker Jazz Orchestra Holiday Show
+UID:9527
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Join the Fuquay-Varina Chorale as they turn the stage into a wi
+ nter wonderland of sound. It's more than just a performance\; it's a celeb
+ ration of our community. https://www.fuquay-varina.org/calendar.aspx?EID=9
+ 525
+DTEND;TZID=America/New_York:20261205T213000
+DTSTAMP;TZID=America/New_York:20260806T153408
+DTSTART;TZID=America/New_York:20261205T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T153408
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Fuquay-Varina Chorale Holiday: Blessings
+UID:9525
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Join the Fuquay-Varina Chorale as they turn the stage into a wi
+ nter wonderland of sound. It's more than just a performance\; it's a celeb
+ ration of our community. https://www.fuquay-varina.org/calendar.aspx?EID=9
+ 526
+DTEND;TZID=America/New_York:20261205T160000
+DTSTAMP;TZID=America/New_York:20260806T153529
+DTSTART;TZID=America/New_York:20261205T140000
+LAST-MODIFIED;TZID=America/New_York:20260806T153529
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Fuquay-Varina Chorale Holiday: Blessings
+UID:9526
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Join the Fuquay-Varina Chorale as they turn the stage into a wi
+ nter wonderland of sound. It's more than just a performance\; it's a celeb
+ ration of our community. https://www.fuquay-varina.org/calendar.aspx?EID=9
+ 524
+DTEND;TZID=America/New_York:20261204T213000
+DTSTAMP;TZID=America/New_York:20260806T153408
+DTSTART;TZID=America/New_York:20261204T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T153408
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Fuquay-Varina Chorale Holiday: Blessings
+UID:9524
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:The official start to the holiday season in Fuquay-Varina! http
+ s://www.fuquay-varina.org/calendar.aspx?EID=9447
+DTEND;TZID=America/New_York:20261203T200000
+DTSTAMP;TZID=America/New_York:20260605T153313
+DTSTART;TZID=America/New_York:20261203T180000
+LAST-MODIFIED;TZID=America/New_York:20260605T153313
+LOCATION:<p>Downtown Fuquay</p> -     
+SEQUENCE:0
+SUMMARY:Town Tree Lighting
+UID:9447
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Tha
+ nksgiving. https://www.fuquay-varina.org/calendar.aspx?EID=9371
+DTEND;TZID=America/New_York:20261127T170000
+DTSTAMP;TZID=America/New_York:20251103T165043
+DTSTART;TZID=America/New_York:20261126T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165043
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Thanksgiving
+UID:9371
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Looking for the perfect way to kick off the holidays? Join us f
+ or an evening with The Embers! They are the absolute icons of Carolina bea
+ ch music and they’re bringing their world-famous holiday show back to Fu
+ quay-Varina. https://www.fuquay-varina.org/calendar.aspx?EID=9523
+DTEND;TZID=America/New_York:20261125T213000
+DTSTAMP;TZID=America/New_York:20260806T152529
+DTSTART;TZID=America/New_York:20261125T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T152529
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:The Embers Christmas
+UID:9523
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Calling all movie Lovers! The 4th Fuquay Film Festival is landi
+ ng at the Arts Center in mid-November. We're bringing together an incredib
+ le mix of short films from across the country\, and we can't wait to share
+  them with you. https://www.fuquay-varina.org/calendar.aspx?EID=9522
+DTEND;TZID=America/New_York:20261114T200000
+DTSTAMP;TZID=America/New_York:20260806T151958
+DTSTART;TZID=America/New_York:20261114T090000
+LAST-MODIFIED;TZID=America/New_York:20260806T151958
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Fuquay Film Festival
+UID:9522
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Calling all movie Lovers! The 4th Fuquay Film Festival is landi
+ ng at the Arts Center in mid-November. We're bringing together an incredib
+ le mix of short films from across the country\, and we can't wait to share
+  them with you. https://www.fuquay-varina.org/calendar.aspx?EID=9521
+DTEND;TZID=America/New_York:20261113T210000
+DTSTAMP;TZID=America/New_York:20260806T150706
+DTSTART;TZID=America/New_York:20261113T180000
+LAST-MODIFIED;TZID=America/New_York:20260806T150706
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Fuquay Film Festival
+UID:9521
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Vet
+ erans Day. https://www.fuquay-varina.org/calendar.aspx?EID=9370
+DTEND;TZID=America/New_York:20261111T170000
+DTSTAMP;TZID=America/New_York:20251103T164855
+DTSTART;TZID=America/New_York:20261111T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T164855
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Veterans Day
+UID:9370
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Experience the fiery intensity of palos flamencos—the traditi
+ onal styles of flamenco—performed with breathtaking skill. From intricat
+ e\, soaring guitar melodies to infectious\, rhythmic joy\, this evening is
+  designed to transport you across the ocean. https://www.fuquay-varina.org
+ /calendar.aspx?EID=9520
+DTEND;TZID=America/New_York:20261107T213000
+DTSTAMP;TZID=America/New_York:20260806T150305
+DTSTART;TZID=America/New_York:20261107T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T150305
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Noche Flamenca
+UID:9520
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:The Sister Moon Project is a dynamic six-piece ensemble of toda
+ y’s most celebrated and world-renowned musicians as they reimagine the t
+ imeless music of Sting and The Police through a fresh and electrifying con
+ temporary jazz lens. https://www.fuquay-varina.org/calendar.aspx?EID=9519
+DTEND;TZID=America/New_York:20261106T213000
+DTSTAMP;TZID=America/New_York:20260806T145925
+DTSTART;TZID=America/New_York:20261106T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T145925
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Icons of Jazz: The Sister Moon Project ft. Grace Kelly & Chrissi Po
+ land
+UID:9519
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Prepare to be spellbound for your Halloween weekend with the in
+ credible magic of Jeki Yoo! https://www.fuquay-varina.org/calendar.aspx?EI
+ D=9518
+DTEND;TZID=America/New_York:20261030T213000
+DTSTAMP;TZID=America/New_York:20260806T145404
+DTSTART;TZID=America/New_York:20261030T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T145404
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Magician Jeki Yoo
+UID:9518
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:No tricks\, just treats for everyone who loves costumes\, candy
+ \, and having a Happy Halloween! https://www.fuquay-varina.org/calendar.as
+ px?EID=9507
+DTEND;TZID=America/New_York:20261023T170000
+DTSTAMP;TZID=America/New_York:20260710T112925
+DTSTART;TZID=America/New_York:20261023T140000
+LAST-MODIFIED;TZID=America/New_York:20260710T112925
+LOCATION:<p>Downtown Fuquay-Varina</p> -     
+SEQUENCE:0
+SUMMARY:Trick-or-Treat Downtown
+UID:9507
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Join us for an enchanting evening as Camille Thurman and Christ
+ ian Tamburr take the stage to celebrate two titans of jazz: Sarah Vaughan 
+ and Dexter Gordon. https://www.fuquay-varina.org/calendar.aspx?EID=9517
+DTEND;TZID=America/New_York:20261022T213000
+DTSTAMP;TZID=America/New_York:20260806T145015
+DTSTART;TZID=America/New_York:20261022T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T145015
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Icons of Jazz: Divine & Dexterous ft. Camille Thurman
+UID:9517
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Get ready to relive the magic! Beatlesque\, one of the Arts Cen
+ ter’s most beloved acts\, returns to the stage to bring the Fab Four bac
+ k to life. https://www.fuquay-varina.org/calendar.aspx?EID=9516
+DTEND;TZID=America/New_York:20261010T213000
+DTSTAMP;TZID=America/New_York:20260806T144643
+DTSTART;TZID=America/New_York:20261010T193000
+LAST-MODIFIED;TZID=America/New_York:20260806T144643
+LOCATION:Fuquay-Varina Arts Center - 123 E. Vance Street  Fuquay-Varina NC 
+ 27526
+SEQUENCE:0
+SUMMARY:Beatlesque
+UID:9516
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=45
+END:VEVENT
+END:VCALENDAR

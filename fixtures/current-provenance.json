@@ -1,0 +1,16 @@
+{
+  "prcr": {
+    "observedAt": "2026-10-06T04:23:34.272Z",
+    "bodySha256": "ea6d1f5ad4bf1f939c3bd53ba31cc07232694787fc8f80974368cdbe03dc0768",
+    "source": "same published feed as archived fixture",
+    "kind": "ordinary local public calendar retrieval",
+    "processing": "No family configuration or private records; raw public ICS retained."
+  },
+  "arts": {
+    "observedAt": "2026-10-06T04:23:34.347Z",
+    "bodySha256": "ff71cb550cadb5e5d61723513732ca9e49077fdaa2b16d3f42b741f36b765849",
+    "source": "same published feed as archived fixture",
+    "kind": "ordinary local public calendar retrieval",
+    "processing": "No family configuration or private records; raw public ICS retained."
+  }
+}

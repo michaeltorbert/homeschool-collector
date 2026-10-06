@@ -1,0 +1,119 @@
+BEGIN:VCALENDAR
+PRODID:iCalendar-Ruby
+VERSION:2.0
+X-WR-TIMEZONE:America/New_York
+BEGIN:VTIMEZONE
+TZID:America/New_York
+X-LIC-LOCATION:America/New_York
+BEGIN:STANDARD
+DTSTART:20241103T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20250309T020000
+RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Chr
+ istmas on December 24\, 25\, and 28. https://www.fuquay-varina.org/calenda
+ r.aspx?EID=9373
+DTEND;TZID=America/New_York:20261228T170000
+DTSTAMP;TZID=America/New_York:20251103T165500
+DTSTART;TZID=America/New_York:20261228T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165500
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Christmas
+UID:9373
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Chr
+ istmas on December 24\, 25\, and 28. https://www.fuquay-varina.org/calenda
+ r.aspx?EID=9372
+DTEND;TZID=America/New_York:20261225T170000
+DTSTAMP;TZID=America/New_York:20251103T165426
+DTSTART;TZID=America/New_York:20261224T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165426
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Christmas
+UID:9372
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:The official start to the holiday season in Fuquay-Varina! http
+ s://www.fuquay-varina.org/calendar.aspx?EID=9447
+DTEND;TZID=America/New_York:20261203T200000
+DTSTAMP;TZID=America/New_York:20260605T153313
+DTSTART;TZID=America/New_York:20261203T180000
+LAST-MODIFIED;TZID=America/New_York:20260605T153313
+LOCATION:<p>Downtown Fuquay</p> -     
+SEQUENCE:0
+SUMMARY:Town Tree Lighting
+UID:9447
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Tha
+ nksgiving. https://www.fuquay-varina.org/calendar.aspx?EID=9371
+DTEND;TZID=America/New_York:20261127T170000
+DTSTAMP;TZID=America/New_York:20251103T165043
+DTSTART;TZID=America/New_York:20261126T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T165043
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Thanksgiving
+UID:9371
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Town of Fuquay-Varina government offices will be closed for Vet
+ erans Day. https://www.fuquay-varina.org/calendar.aspx?EID=9370
+DTEND;TZID=America/New_York:20261111T170000
+DTSTAMP;TZID=America/New_York:20251103T164855
+DTSTART;TZID=America/New_York:20261111T080000
+LAST-MODIFIED;TZID=America/New_York:20251103T164855
+LOCATION: -     
+SEQUENCE:0
+SUMMARY:Closed for Veterans Day
+UID:9370
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:No tricks\, just treats for everyone who loves costumes\, candy
+ \, and having a Happy Halloween! https://www.fuquay-varina.org/calendar.as
+ px?EID=9507
+DTEND;TZID=America/New_York:20261023T170000
+DTSTAMP;TZID=America/New_York:20260710T112925
+DTSTART;TZID=America/New_York:20261023T140000
+LAST-MODIFIED;TZID=America/New_York:20260710T112925
+LOCATION:<p>Downtown Fuquay-Varina</p> -     
+SEQUENCE:0
+SUMMARY:Trick-or-Treat Downtown
+UID:9507
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Fuquay-Varina's outdoor concert series\, Follow Me to Fuquay-Va
+ rina (FM2FV)\, is back for another season! https://www.fuquay-varina.org/c
+ alendar.aspx?EID=9483
+DTEND;TZID=America/New_York:20261015T210000
+DTSTAMP;TZID=America/New_York:20260819T113435
+DTSTART;TZID=America/New_York:20261015T180000
+LAST-MODIFIED;TZID=America/New_York:20260819T113435
+LOCATION:Centennial Square Parking Lot - 102 N. Main Street  Fuquay-Varina 
+ NC 27526
+SEQUENCE:0
+SUMMARY:FM2FV Concert Series: Spare Change
+UID:9483
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=23
+END:VEVENT
+END:VCALENDAR
