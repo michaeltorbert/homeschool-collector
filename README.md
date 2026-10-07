@@ -2,6 +2,8 @@
 
 A working, private-on-this-computer inbox for public Town of Fuquay-Varina calendar events. It is a narrow public-events preview, not the full WebTrac class/camp catalog.
 
+For a fresh conversation, start with [the roadmap and planning index](docs/ROADMAP.md), then the selected issue and its linked specification. [BACKLOG.md](BACKLOG.md) maps all open work to GitHub issues. [Planning notes](docs/PLANNING-NOTES.md) explain superseded and incomplete review records.
+
 ## Run
 
 Requires Node 25 (tested 25.9.0) and npm. From this directory:

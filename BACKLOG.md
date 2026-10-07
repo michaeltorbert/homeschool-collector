@@ -1,20 +1,25 @@
-# Remaining work
+# Remaining work — issue index
 
-## Low-priority recovery and accessibility
+The central handoff is [docs/ROADMAP.md](docs/ROADMAP.md). Read each live issue and its comments for current status. Specifications distinguish planned behavior from the current local preview.
 
-- Recover a committed decision after a lost response or failed snapshot refresh without overwriting a newer choice. Keep the immutable idempotency receipt, show the saved decision, and preserve a replacement draft until deliberately submitted/discarded.
-- Prevent an older in-flight snapshot from briefly replacing a newer decision projection. Verify delayed responses cannot reverse displayed state or counts.
-- Explain when a stale reconsideration review records only older shown facts and leaves the current reconsideration pending.
-- Describe source-specific attendance changes accurately when only a nonselected feed changes.
-- Preserve the original SQLite error if rollback discovers the transaction already rolled back; keep initialization fail-closed and release locks.
-- Avoid taking focus from a live search field when a decision completes after manual dialog close. Keep newly mounted background notices inert while a dialog is open. Verify mouse and keyboard trigger restoration in native browsers that do not focus clicked buttons.
+## Nonblocking cleanup
 
-These are retained nonblocking follow-ups from independent code review. Exact decision writes, source acknowledgments and history remain separate and fail closed.
+- [#3](https://github.com/michaeltorbert/homeschool-collector/issues/3) — F9 uncertain delivery/refresh recovery, N2 snapshot ordering, N3 stale reconsideration wording, N4 original SQLite error.
+- [#4](https://github.com/michaeltorbert/homeschool-collector/issues/4) — N4 per-source wording and O1–O3 delayed focus, newly mounted inert background, native opening-trigger restoration.
 
-## Planned phases
+Eight checks are preserved with concrete acceptance in [reliability/accessibility](docs/plans/reliability-and-accessibility.md). N1/F4b were resolved; do not refile historical OPEN text.
 
-1. Provider age rules, audience hints and optional private profile precision, preserving uncertainty and source conflicts.
-2. Bounded deterministic interest learning, explicit explanations, undo/reset controls and parent usefulness evaluation.
-3. Broader concern and recurring-window controls; optional public-text semantic extraction only after choosing its service and data boundary.
-4. Verify source coverage, a permitted complete class/camp source, calendar export, and additional providers.
-5. Implement and test a Worker/D1 adapter, protected hosted access and scheduling before deployment. The current development server stays loopback-only.
+## Planned features and gates
+
+- [#1](https://github.com/michaeltorbert/homeschool-collector/issues/1) — Muse-assisted private intake and permitted unattended delivery.
+- [#2](https://github.com/michaeltorbert/homeschool-collector/issues/2) — age/evidence/profile precision and reversible fit feedback; next feature.
+- [#5](https://github.com/michaeltorbert/homeschool-collector/issues/5) — Bounded reversible interest learning.
+- [#6](https://github.com/michaeltorbert/homeschool-collector/issues/6) — Broad concerns/recurring windows.
+- [#7](https://github.com/michaeltorbert/homeschool-collector/issues/7) — Town coverage and complete class/camp route.
+- [#8](https://github.com/michaeltorbert/homeschool-collector/issues/8) — Optional calendar file.
+- [#9](https://github.com/michaeltorbert/homeschool-collector/issues/9) — Protected Worker/D1/scheduling.
+- [#10](https://github.com/michaeltorbert/homeschool-collector/issues/10) — Usefulness/public-text extraction choice.
+- [#11](https://github.com/michaeltorbert/homeschool-collector/issues/11) — Multiple children/operators.
+- [#12](https://github.com/michaeltorbert/homeschool-collector/issues/12) — Wholly unavailable Claude validator handling.
+
+Private family data and raw review packets remain outside Git. Full catalog, hosted scheduling, exports, external extraction and multi-subject operation remain unverified until the applicable issue acceptance is actually met. The workflow-tooling issue is tracking only; global policy repair requires separate authorization.

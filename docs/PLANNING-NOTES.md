@@ -1,0 +1,11 @@
+# Planning status and record boundaries
+
+Consolidated October 6, 2026. The [roadmap](ROADMAP.md), linked specifications and live issues/comments are the repository-only handoff. Current source and checks establish implemented behavior; plans and issue checklists do not. Read live issue comments for changes since the documentation snapshot. Update issue and specification together if scope changes.
+
+The local preview/reason-aware decision foundation is implemented. Age, learning, broader constraints, full catalog access, Muse, export, hosted scheduling and multi-subject operation are future work. Neutral public defaults supersede household-specific examples from private planning. Do not reconstruct private profiles from old notes or copy family-specific preferences, DBs, browser captures, raw review packets or model/session envelopes into Git.
+
+The age specification consolidates the latest corrected v2 plan, not its earlier candidate. Opus contributed four additional gaps; Codex corrected them and Sol accepted the resulting plan. Opus final recheck and peer ballot were quota-blocked. No two-seat age consensus is claimed. Earlier learning planning included corrected historical multi-model reconciliation; that history is design input, not implementation/usefulness approval or standing authorization to call Fable again. Current user instructions and live skills/AGENTS govern model use. Do not rerun settled planning solely to repeat provenance ceremonies.
+
+Earlier Change reasons draft protection and list/active-tab focus fallback (N1/F4b) were resolved before the source baseline; remaining recovery/accessibility checks are separately tracked. Age review findings are corrected in its proposed specification and tests, not implemented fixes. Supplemental age details supersede earlier broad age wording; learning does not change ranking in the age increment.
+
+Raw reviews and family-specific context remain local outside this public repository. They are supplementary audit material, not required for normal implementation: public specifications retain the operative contracts, acceptance checks, unresolved gates and review limitations. A fresh clone has enough scope to start one issue; obtaining actual private pilot data, operator permissions or deployment authorization still requires the relevant gate.
