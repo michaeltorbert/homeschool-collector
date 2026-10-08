@@ -105,6 +105,77 @@ A frozen measurement is never rewritten. When the parser revision changes afterw
 - Per-requirement status (C01–C10) for the October 8 documentation candidate is in [catalog access evidence](catalog-access-evidence.md#requirement-status); none is waived.
 - Dated local evidence for this module (historical reuse on an earlier candidate; not integration, production, hosted or catalog proof): on October 7, 2026 at 20:28:59Z the coordinator ran a real two-feed check through `SourceChecker` on Node 25.9.0. Result: 7 Parks/Recreation and 20 Arts listings, 6 shared and 21 unique identities, 0 parser rejects and 0 duplicates. After that run only Sources date formatting changed; the retriever, store, parser and schema were identical. The coordinator's actual Sources view checks at 1280 and 390 px were refreshed on the current application bytes. This run is separate from the 18:30 UTC preflight.
 
+### Public brochure document collector (scope E01, intermediate)
+
+Status: implemented locally on `feature/automatic-public-program-collection`; not reviewed, merged or released at authorship. The author ran no tests, builds or live collection; results belong to the coordinator's run on the exact artifact. This is an explicit, limited **intermediate** collector of published Town brochure PDFs. It does **not** meet C03/C05: no permitted complete class/camp catalog route, measured scope, bookable course/section/occurrence identity, signup, capacity or availability semantics exist. Issue #7 stays open, Wake stays deferred, and nothing here implies release or hosting. Brochure candidates are not fed into listings, age suitability, learning or notices.
+
+**Access boundary.** Automatic, ordinary, identified GETs to the exact host `www.fuquay-varina.org` only. Each admitted run fetches `robots.txt` first, then the fixed seeds `/311/Programs`, `/328/Summer-Camp-Programs` and `/1088/Dance-Class`, then only published `https://www.fuquay-varina.org/DocumentCenter/View/<numeric id>[/<slug>]` links from those pages. There is no generic crawl, sitemap, API guessing, flipbook or registration-host request. The denied registration host stays excluded. Brochure links that are not followed (for example the Dance page's off-host flipbook) are recorded by host or Town path only, so that coverage is reported as unsupported rather than complete. No outreach, account, manual export or AI/model call is involved.
+
+**robots.txt.** RFC 9309 groups for the `HomeschoolCollector-Documents` token, else `*`; longest match wins and Allow wins ties; `*` and `$` patterns; case-sensitive paths. Unknown fields, malformed lines, invalid patterns or a crawl delay over 30 s in the applicable group fail closed. Crawl delays up to 30 s raise the 5 s pacing. A robots 404/other 4xx, wrong type or oversize, an unsupported policy, or a disallowed seed/document makes a sticky Town-lane stop. A robots 5xx/timeout aborts the run without inferring permission.
+
+**Transport** (`server/documents/fetch.ts`, separate from the calendar retriever). `redirect:'error'`, no credentials, cookies or retries, and one 15 s timeout over headers and body. Advertised and streamed caps: 1 MiB for robots, 1 MiB per HTML page and 12 MiB per PDF; the reader is cancelled on every early exit. MIME and `%PDF-` magic are validated. Fixed categories:
+- **Sticky Town-lane stop:** 401/403 (denied); a challenge header or interstitial (challenge); HTML instead of a PDF.
+- **Backoff:** 429, for the larger of Retry-After and 24 h, capped at 30 days.
+- **Transient, retried at the next schedule only:** 5xx, network/redirect failure, timeout or stream failure.
+- **Per-document failure, other documents continue:** other statuses, wrong type, not a PDF, too large.
+
+ETag/Last-Modified are kept only when well-formed and bounded. A conditional request is sent only from the latest version whose representation is still retained. A 304 is accepted only for such a request with a matching ETag; otherwise it is `unexpected-not-modified`. There is no HEAD request.
+
+**Scheduling and admission** (`server/documents/store.ts`, ignored `data/documents.sqlite`, independent of the family database).
+- Server start runs a due check, and an unref'd hourly timer repeats it. The CLI `run` uses the same persisted gates; there is no force, clear, reset or unblock command.
+- Admission commits a fence, a 20-minute lease and the next run time (24 h) before robots is requested. Restarts and a concurrent CLI/server therefore cannot fetch again inside the window.
+- Every request first persists a lane-wide pacing reservation (5 s minimum).
+- PDFs are due 7 days after their last non-transient attempt; newly linked documents are due immediately. Each run is capped at 6 PDFs and 72 MiB; extra due documents are reported as deferred, with no completeness claim.
+- Completions check fence and lease, so a stale completion writes nothing. An identical repeat replays; a differing one conflicts.
+
+**Evidence model.**
+- Attempts, versions, blobs, parses and candidates are immutable while retained.
+- One document source per numeric DocumentCenter ID. Every published slug URL is a separate link row under the seed that published it, so actual parent relations are kept and nothing is merged across IDs.
+- Seed HTML is parsed by parse5 without execution. Only a sanitized link inventory is stored: no scripts, queries, tokens/CSRF or off-host URLs beyond the host name. The original byte hash is kept separately from the stored-representation hash.
+- PDF bytes are retained locally (ignored, never in Git) for local reparse and replay.
+- Separate pointers are kept for:
+  - **latest download** and **latest parse**;
+  - **last complete-good parse**: complete traversal, no quarantined page, at least one candidate;
+  - **last usable parse**: complete-good, or partial with at least one candidate.
+- The displayed fragments are the last complete-good parse, else the last usable partial parse, else the latest parse. A failed, empty or partial new download therefore never hides earlier usable fragments.
+- Every list row and source view carries the current status next to what is displayed: `display` (`last-good`, `latest-partial`, `last-known-partial` or `latest-<status>`), whether the shown parse is the latest one, the latest parse status and failure category, the latest attempt and a fixed label. Earlier evidence is never promoted to complete coverage or bookability.
+- A first parse with gaps is shown labelled partial rather than hidden.
+- Unchanged 200 bytes and accepted 304s are verifications (verified time), with no re-extraction. Acquisition, verification and parser-reprocessing times stay distinct.
+- A publisher returning to bytes still retained under an earlier version of the same document (A→B→A) records a new `retained-version` attempt. That earlier immutable version and its parse become current again; fragment identities stay content-bound, so nothing is re-extracted or duplicated, and the rest of the batch continues. If the earlier version was already pruned, the bytes are stored and extracted as a new version.
+- Retention per source: the latest 2 good versions (a document version is good when it has a complete-traversal parse; robots and seed representations are good once stored), plus every version referenced by the latest-download, latest-parse, complete-good or usable pointers. Other versions are pruned with their parses. 100 attempts per source.
+- Quota: 200 MiB of retained bodies. When the quota would be exceeded, only unprotected evidence is pruned, oldest first. If that is not enough, the new version is refused (`quota-exceeded`) and the transaction rolls back.
+- Seed link inventories (revision `link-inventory-v2`) remove duplicate anchors before a 200-link cap; slug aliases of one numeric ID remain distinct links. Overflow sets `truncated` with the reason `document-link-cap` and counts omitted distinct links and numeric IDs. These appear in the seed's status and the run report and make the run partial. Omitted documents cannot be collected or deferred because their URLs are not retained. The six-PDF run cap is separate. Because the stored inventory shape changed, the first check after upgrading records new seed representations.
+- Opening an earlier document database upgrades it in one transaction. The attempts table is rebuilt only to admit the `retained-version` outcome: all rows, IDs and the immutability trigger are kept. The usable-parse pointer is added and backfilled from retained parses. No evidence row or time changes and nothing is fetched.
+- Absence from a seed page or zero links is reported only (`currentlyLinked:false`) and never cancels or removes anything.
+
+**Extraction** (`server/documents/pdf.ts`, `pdfWorker.mjs`, `layout.ts`).
+- pdf.js 5.6.205 (legacy build) runs in a disposable worker thread. Settings: data-only input, `isEvalSupported:false`, `useWorkerFetch:false`, no font faces or system fonts, and no remote font/CMap URLs.
+- Limits: 30 s wall clock with termination; an explicit 192 MB old-generation JS heap limit (not a total RSS ceiling); 80 pages, 1,000,000 characters and 100,000 text items. Budget overflow is reported as partial.
+- Encrypted, malformed, timeout, heap-limit and crash outcomes are fixed categories. Worker output is discarded.
+- Layout is positional: program-code anchors (2–6 capital letters, an optional space, 3–4 digits) define column-start clusters, and items are assigned by their left edge. There is no page-midpoint split.
+- The whole page is quarantined, never guessed, when an item reaches across the gutter, when there is unanchored body text far right of a column start, or when there are more than 3 code columns or irregular ones.
+- Headings bind by geometry (taller lines directly above a code). Blocks end at the next heading or code, or at a vertical gap over 3.2 body lines.
+- Counted, never silently dropped: rotated and off-page items, textless pages (for example blank back covers), pages without codes, items outside columns, orphan lines and continuation lines. Nothing is joined across columns or pages.
+- Each candidate is a versioned fragment. Its ID binds source, full document hash, parser revision, page, column and ordinal.
+- Each candidate keeps the raw code and a narrow normalized search code; duplicate codes are flagged, never merged. It also keeps the raw heading, age text, description, ordered schedule groups (day/time, location, date lines), instructor and fee, each with line/character spans into the retained block lines, plus page, column, bbox, block text and its hash.
+- A missing field is null with a warning, never copied from a neighbor. Backward date text such as `Oct. 29- Oct. 23` stays raw with a flag.
+- No year, ISO date, recurrence, eligibility, capacity, section or availability is inferred.
+
+**Access to results.**
+- Read-only `GET /api/documents` (filters `q`, `code`, `doc`, `view=display|latest`, `limit` ≤ 100, `cursor`), `/api/documents/status`, `/api/documents/candidates/<id>` and `/api/documents/sources/<documentId>`.
+- These routes sit behind the same loopback Host/peer/Origin guards, never trigger a check, and return no file paths, bodies or exception text.
+- Every response carries the limits: incomplete, not bookable, availability unknown, registration not connected.
+- The CLI (`npm run documents -- run|status|list|search|detail|source|replay|reparse`) gives structured JSON. `reparse` reprocesses retained bytes as new local evidence with no request. `replay` is a read-only comparison with the stored parse.
+- The existing app snapshot and its catalog label are unchanged. No UI was added.
+
+**Evidence used for authoring (public, retained outside Git).** One ordinary Node 25.9.0 acquisition on October 8, 2026 (UTC):
+- robots.txt, the three seed pages and three brochures (DocumentCenter 16912, 17892 and 13472; 52, 8 and 16 pages, each with a textless last page);
+- pdf.js 5.6.205 positional tokens, and page 6 and 9 renderings of 16912.
+
+The author checked the page 6 and 9 pixels against token coordinates. Page 6 has columns at x≈82 and x≈348 with the sidebar on the left; page 9 has columns at x≈19 and x≈279, a gutter of about 13 pt and the sidebar on the right. Content order interleaves columns and separates headings from their codes. A test re-checks those associations against the retained token export when it is present locally and is skipped otherwise. The Summer page links a different DocumentCenter ID (17585) than the Programs page (17892) for the summer brochure; the two remain separate documents.
+
+**Remaining for #7 after E01:** C03 and C05 remain unmet. Publisher catalog completeness, brochure currency against the registration system, and the stability of program codes as identities are unknown. Live intended-runtime collection, replay and review are the coordinator's and reviewer's actions on the exact artifact, and nothing here records them as done.
+
 Muse is independently tracked in issue #1: permitted group/sender capabilities; narrow authenticated receiver/schema/receipt; stable post plus separate activity identities; replay, changed/out-of-order posts, minimal private data and partial/empty/missed reports; actual unattended delivery and permission proof. A synthetic receiver test is not account-specific working integration. Bootstrap receiver design can precede real delivery, but acceptance cannot.
 
 ## Optional calendar file

@@ -1,10 +1,11 @@
 import type {IncomingMessage,ServerResponse} from 'node:http';
 import {ConflictError,ScanBusyError,type Store} from './store.ts';
 import {ProfileError} from '../src/age.ts';
+import {DocumentQueryError,type DocumentStore} from './documents/store.ts';
 export function send(res:ServerResponse,status:number,data:any){res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(data));}
 async function body(req:IncomingMessage){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>32_000)throw Error('Request too large.');}return JSON.parse(raw||'{}');}
 // Loopback host/peer, same-origin and JSON-mutation guards apply to every /api/ route, including the private profile routes.
-export function createHandler(options:{store:Store;port:()=>number;scan:()=>Promise<any>;scanState:()=>{scanning:boolean;lastScan:any};fallback:(req:IncomingMessage,res:ServerResponse)=>void}){
+export function createHandler(options:{store:Store;port:()=>number;scan:()=>Promise<any>;scanState:()=>{scanning:boolean;lastScan:any};fallback:(req:IncomingMessage,res:ServerResponse)=>void;documents?:DocumentStore|null}){
  const {store}=options;
  return async(req:IncomingMessage,res:ServerResponse)=>{
   const port=options.port(),origin=`http://127.0.0.1:${port}`;
@@ -17,6 +18,21 @@ export function createHandler(options:{store:Store;port:()=>number;scan:()=>Prom
    try{
     const route=req.url.split('?')[0];
     if(req.method==='GET'&&route==='/api/snapshot'){send(res,200,{...store.snapshot(),...options.scanState()});return;}
+    // Public brochure evidence: read-only views of the separate document database. These GETs never start a check.
+    if(route==='/api/documents'||route.startsWith('/api/documents/')){
+     const docs=options.documents;
+     if(req.method!=='GET'){send(res,405,{error:'Read-only route.'});return;}
+     if(!docs){send(res,503,{error:'Document evidence is unavailable.'});return;}
+     try{
+      const params=new URL(req.url,'http://127.0.0.1').searchParams;
+      if(route==='/api/documents'){send(res,200,docs.listCandidates({q:params.get('q'),code:params.get('code'),doc:params.get('doc'),view:params.get('view'),limit:params.get('limit'),cursor:params.get('cursor')}));return;}
+      if(route==='/api/documents/status'){send(res,200,docs.status());return;}
+      const candidate=/^\/api\/documents\/candidates\/([^/]{1,100})$/.exec(route),source=/^\/api\/documents\/sources\/([^/]{1,20})$/.exec(route);
+      const detail=candidate?docs.candidateDetail(candidate[1]):source?docs.sourceDetail(source[1]):undefined;
+      if(detail===undefined)send(res,404,{error:'Unknown route.'});else if(detail===null)send(res,404,{error:'Not found.'});else send(res,200,detail);
+     }catch(e){send(res,e instanceof DocumentQueryError?400:500,{error:e instanceof DocumentQueryError?e.message:'Document evidence could not be read.'});}
+     return;
+    }
     // Scan failures never echo SQL, remote or exception text; only the fixed busy message is passed through.
     if(req.method==='POST'&&route==='/api/scan'){let result;try{result=await options.scan();}catch(e){send(res,e instanceof ScanBusyError?409:500,{error:e instanceof ScanBusyError?e.message:'Source check could not run. Last-known results are retained.'});return;}send(res,200,result);return;}
     if(req.method==='POST'&&route==='/api/action'){const b=await body(req);store.action(b.id,b.action,b.value);send(res,200,{ok:true});return;}
