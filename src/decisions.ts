@@ -1,4 +1,5 @@
 import type {Opportunity} from './domain';
+import {ageMaterialKey} from './ageEvidence';
 export const LOCAL_SCOPE = {householdId:'household:local',subjectId:'child:local',actorId:'operator:local'} as const;
 export const REASONS = {
  timing:'This date or time does not work',
@@ -10,6 +11,43 @@ export const REASONS = {
 } as const;
 export type ReasonCode=keyof typeof REASONS;
 export const CONCERN_DIMENSIONS=['price','travel','format','duration','organizer'] as const;
+// Optional clarification of a wrong-fit pass. Parent judgment only: never a medical or readiness assessment.
+export const FIT_DIMENSIONS={'too-young':'Too young for this','too-old':'Too old for this','other':'Otherwise the wrong fit'} as const;
+export type FitDimension=keyof typeof FIT_DIMENSIONS;
+// Frozen age basis of a decision: revision IDs and material signatures, never a birthday or birthday-derived hash.
+export function ageBasis(age:any){
+ if(!age)return null;
+ return {algorithmRevision:age.algorithmRevision,extractorRevision:age.extractorRevision,calendarParserRevision:age.calendarParserRevision,sourceVersion:age.sourceVersion,profileRevisionId:age.profileRevisionId,identity:age.identity,ruleSignature:age.ruleSignature,outcomeSignature:age.outcomeSignature,status:age.status,comparison:age.comparison??null,rules:age.rules.map((r:any)=>({min:r.min,max:r.max,reference:r.reference,comparison:r.comparison,quotes:r.evidence.map((e:any)=>({part:e.part,quote:e.quote,representationHash:e.representationHash}))})),conflict:age.conflict,unresolved:age.unresolved??[],hints:age.hints.map((h:any)=>({part:h.part,hint:h.hint,quote:h.span.quote}))};
+}
+// Age reconsideration binds the exact active fit decision and the current material outcome signature.
+export const ageReconsiderKey=(decisionId:string,age:any)=>JSON.stringify({decisionId,outcomeSignature:age.outcomeSignature});
+// Outcome signatures written by earlier revisions hashed their own serialization of the basis. A legacy age review is
+// honoured only if its key's signature is exactly one of those serializations of the basis it stored; arbitrary or
+// mismatching hashes are never accepted.
+function legacyOutcomeSignatures(basis:any,hash:(value:string)=>string){
+ if(!basis?.rules)return [];
+ const rules=basis.rules.map((r:any)=>({min:r.min,max:r.max,reference:r.reference})),perRule=basis.rules.map((r:any)=>r.comparison);
+ const comparison=basis.comparison!==undefined?basis.comparison:basis.rules.length===1?basis.rules[0].comparison??null:null;
+ return [
+  hash(JSON.stringify({rules,conflict:basis.conflict,perRule,status:basis.status,comparison})),
+  hash(JSON.stringify({rules,conflict:basis.conflict,unresolved:basis.unresolved??[],perRule,status:basis.status,comparison})),
+ ];
+}
+// The material state an age review acknowledged: recorded explicitly by current reviews, or a hash-verified legacy basis.
+function reviewedAgeState(e:DecisionEvent,hash?:(value:string)=>string){
+ if(e.snapshot?.ageReviewed)return e.snapshot.ageReviewed;
+ let signature:unknown;try{signature=JSON.parse(e.payload.reviewKey).outcomeSignature;}catch{return null;}
+ return hash&&legacyOutcomeSignatures(e.snapshot?.age,hash).includes(String(signature))?e.snapshot.age:null;
+}
+export const fitDecision=(reasons:ReasonCode[])=>reasons.includes('wrong-fit');
+// Show anyway projection. The latest unreverted show is the record. A material basis change lapses it permanently:
+// lapses are persisted, so a later return to the same outcome does not silently reactivate it; only a fresh show does.
+export function projectOverride(events:any[],currentAge:any,lapsed:ReadonlySet<string>=new Set()){
+ let record:any=null;
+ for(const e of events){if(e.action==='show')record=e;else if(e.action==='revert'&&record?.override_id===e.target_override_id)record=null;}
+ const active=Boolean(record)&&!lapsed.has(record.override_id)&&ageMaterialKey(record.basis)===ageMaterialKey(currentAge);
+ return {record,active,lapsed:Boolean(record)&&!active,explanation:record&&!active?'The stated age rule, its reference or the profile comparison changed after you chose Show anyway. Age placement applies again until you choose again or revert; your history is kept.':null,history:events};
+}
 export interface GroundedFeature {id:string;label:string;kind:'topic'|'format';quote:string;start:number;end:number;field:'title'|'description';revision:string;type:'inferred';uncertainty:string;}
 const featurePatterns:Record<string,{label:string;kind:'topic'|'format';pattern:RegExp}>={
  sailing:{label:'Sailing',kind:'topic',pattern:/\bsail(?:ing|boat)?\b/i},
@@ -64,18 +102,39 @@ export function attendanceDifferences(before:any,after:any){
 export function timingReason(reasons:ReasonCode[]){return reasons.includes('timing')||reasons.includes('conflict');}
 export function primaryReconsider(reasons:ReasonCode[]){return timingReason(reasons)&&!reasons.includes('general');}
 export interface DecisionEvent {decision_id:string;action:string;supersedes_id:string|null;reverses_id:string|null;target_decision_id:string|null;payload:any;snapshot:any;created_at:string;}
-export function projectDecision(events:DecisionEvent[],currentEnvelope:any,now:Date){
+// Legacy reconsider_review events have no reviewKind and acknowledge attendance only.
+const reviewKind=(e:DecisionEvent)=>e.payload?.reviewKind??'attendance';
+// The exact active pass after supersession and Undo. A pass-linked learning instruction is live only while its pass is.
+export function activeDecision(events:DecisionEvent[]){
  const byId=new Map<string,DecisionEvent>(),reversed=new Set<string>();let active:DecisionEvent|null=null;
  for(const e of events){byId.set(e.decision_id,e);if(e.action==='pass')active=e;
   else if(e.action==='undo'){reversed.add(e.reverses_id!);if(active?.decision_id===e.reverses_id){let prior:DecisionEvent|null=active.supersedes_id?byId.get(active.supersedes_id)??null:null;while(prior&&reversed.has(prior.decision_id))prior=prior.supersedes_id?byId.get(prior.supersedes_id)??null:null;active=prior;}}
  }
- if(!active)return {active:null,reconsider:null,history:events};
+ return active;
+}
+export function projectDecision(events:DecisionEvent[],currentEnvelope:any,now:Date,currentAge?:any,hash?:(value:string)=>string){
+ const active=activeDecision(events);
+ if(!active)return {active:null,reconsider:null,ageReconsider:null,history:events};
  const current=attendanceSnapshot(currentEnvelope),changed=attendanceKey(active.snapshot.attendance)!==attendanceKey(current);
  const shown=currentEnvelope.event as Opportunity;
  const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
  const upcoming=shown.status!=='cancelled'&&(shown.recurring||(shown.start.instant?new Date(shown.end.instant??shown.start.instant)>=now:shown.start.kind==='all-day'?(shown.end.local?shown.end.local.slice(0,10)>today:(shown.start.local??'')>=today):!shown.start.local||shown.start.local.slice(0,10)>=today));
- const reviewed=events.some(e=>e.action==='reconsider_review'&&e.target_decision_id===active!.decision_id&&attendanceKey(e.snapshot.attendance)===attendanceKey(current));
+ const reviewed=events.some(e=>e.action==='reconsider_review'&&reviewKind(e)==='attendance'&&e.target_decision_id===active!.decision_id&&attendanceKey(e.snapshot.attendance)===attendanceKey(current));
  const reasons=active.payload.reasons as ReasonCode[];
  const reconsider=changed&&timingReason(reasons)&&upcoming&&!reviewed?{decisionId:active.decision_id,primary:primaryReconsider(reasons),reason:'You passed because of timing or a conflict; the displayed attendance facts changed.',before:active.snapshot.attendance,after:current,programLevel:active.snapshot.decisionScope==='program'||current.displayed.recurring,scopeChanged:Boolean(active.snapshot.event.recurring)!==Boolean(current.displayed.recurring),differences:attendanceDifferences(active.snapshot.attendance,current)}:null;
- return {active,reconsider,history:events};
+ // Material age/profile/reference change for a fit pass. Today's date never enters the key; the pass stays active.
+ // Passes recorded before age bases existed have no frozen basis and are not compared.
+ let ageReconsider=null;
+ const basis=active.snapshot.age;
+ const currentMaterial=currentAge?ageMaterialKey(currentAge):null;
+ if(currentAge&&basis&&fitDecision(reasons)&&upcoming&&ageMaterialKey(basis)!==currentMaterial){
+  const key=ageReconsiderKey(active.decision_id,currentAge);
+  const ageReviewed=events.some(e=>{
+   if(e.action!=='reconsider_review'||reviewKind(e)!=='age'||e.target_decision_id!==active!.decision_id)return false;
+   const reviewed=reviewedAgeState(e,hash);
+   return reviewed?ageMaterialKey(reviewed)===currentMaterial:false;
+  });
+  if(!ageReviewed)ageReconsider={decisionId:active.decision_id,key,reason:'You passed as the wrong fit; the stated age rule, its reference or its comparison with the current profile changed.',before:basis,after:ageBasis(currentAge),fitDimensions:active.payload.fitDimensions??[]};
+ }
+ return {active,reconsider,ageReconsider,history:events};
 }

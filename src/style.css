@@ -2,3 +2,35 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 .pass-label{display:block;color:var(--green);flex-basis:100%;padding-top:3px}.decision-summary{border-left:2px solid var(--green);padding:8px 16px}.decision-summary ul{padding-left:18px;font-size:13px}.decision-summary button{margin:5px 8px 0 0}.decision-warning{padding:12px;background:#ececdf;color:#3c4b35}.reason-form{border-block:1px solid var(--line);margin:24px 0;padding-bottom:22px}.reason-form fieldset{border:0;border-top:1px solid var(--line);padding:15px 0;margin:15px 0}.reason-form legend{font-size:13px;font-weight:700;padding-right:10px}.reason-form .checkbox{margin:12px 0;align-items:flex-start;font-size:13px}.reason-form .checkbox input{margin-top:4px}.reason-form label:not(.checkbox){display:flex;flex-direction:column;gap:7px;font-size:13px;margin:14px 0}.reason-form textarea{font:inherit;padding:10px;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:3px;background:#fffdf7;max-width:100%}.reason-form select{max-width:100%;white-space:normal}.reconsider-panel{padding:8px 0 14px;border-bottom:1px solid var(--line)}.decision-audit{margin-top:20px;font-size:12px}.decision-audit summary{cursor:pointer;color:var(--green)}.other-changes{border-bottom:1px solid var(--line);padding:16px 0}.other-changes h2{font-size:22px}.other-changes p{font-size:12px;color:var(--muted)}.other-changes button{display:block;margin:8px 0;text-align:left}.private-note{white-space:pre-wrap;overflow-wrap:anywhere}
 .attendance-difference{border-left:2px solid var(--line);padding:5px 12px;margin:12px 0}.attendance-difference strong{font-size:12px}.attendance-difference p{font-size:12px;margin:4px 0}.list-title h2:focus,#decision-heading:focus{outline:2px solid #608572;outline-offset:4px}
+.age-label{border:1px solid var(--line);padding:1px 6px;border-radius:3px;color:#3c4b35}
+.age-outside{border-color:#b9a58c;color:#5b4531}
+.age-meets{border-color:#9db39f;color:var(--green)}
+.age-details{padding:8px 0 14px;border-bottom:1px solid var(--line)}
+.age-details h4,.profile-editor h4{margin:12px 0 4px;font-size:13px}
+.profile-editor{margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+.profile-editor fieldset{border:0;padding:0;margin:0 0 12px}
+.profile-editor legend{font-weight:bold;margin-bottom:4px}
+.profile-fields label{display:flex;flex-direction:column;gap:4px;max-width:260px;margin-bottom:8px}
+.profile-editor [aria-invalid=true]{outline:2px solid #8a5a3c}
+.legacy-panel{padding:12px;background:#ececdf;margin-bottom:12px}
+.legacy-panel code{overflow-wrap:anywhere}
+.legacy-flag{color:#3c4b35}
+.learning-details{padding:8px 0 14px;border-bottom:1px solid var(--line)}
+.learning-details .group-choice,.instruction-form fieldset{border:0;padding:0;margin:10px 0}
+.learning-details legend{font-size:13px;font-weight:700}
+.learning-details .checkbox{margin:8px 0;align-items:flex-start;font-size:13px}
+.learning-details label:not(.checkbox){display:flex;flex-direction:column;gap:5px;font-size:13px;margin:8px 0}
+.learning-details select{max-width:100%}
+.learning-entry{border-left:2px solid var(--green);padding:4px 14px}
+.learning-panel{margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+.learning-panel h4{margin:18px 0 6px;font-size:13px}
+.learning-rules{font-size:12px;color:var(--muted);padding-left:18px}
+.table-scroll{overflow-x:auto}
+.learning-table{border-collapse:collapse;font-size:12px;width:100%;min-width:560px}
+.learning-table caption{text-align:left;font-weight:700;padding:8px 0}
+.learning-table th,.learning-table td{border-top:1px solid var(--line);padding:6px 8px 6px 0;text-align:left;vertical-align:top}
+.learning-table thead th{color:var(--muted);font-weight:600}
+.learning-table span{display:block;color:var(--muted);font-size:11px}
+.instruction-fields{display:flex;gap:12px;flex-wrap:wrap}
+.instruction-fields label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
+.override-note{margin:-8px 0 12px;font-size:12px!important;color:#3c4b35!important}
