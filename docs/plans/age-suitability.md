@@ -1,6 +1,6 @@
 # Age and suitability implementation plan — issue #2
 
-This is a local, one-child increment. It does not implement interest learning or promise registration eligibility. Baseline source is clean commit 1d63a1f0ee4ee54e4a8bb55d1c37d353dfb676a2, tree 009f3e01db4e1e73b17a0e773067e0016307c903. Root reran all 42 tests and the TypeScript/Vite build successfully. Proposed behavior is not implemented or tested yet.
+This is a local, one-child increment. It does not implement interest learning or promise registration eligibility. Baseline source is clean commit 1d63a1f0ee4ee54e4a8bb55d1c37d353dfb676a2, tree 009f3e01db4e1e73b17a0e773067e0016307c903. Root reran all 42 tests and the TypeScript/Vite build successfully. Slices A–C were implemented on the earlier branch `feature/private-age-suitability` (historical) and are now part of the combined local candidate on `feature/reviewed-preview-integration`; see [Delivered implementation](#delivered-implementation) for what was built, tested and measured, and what remains unverified.
 
 ## 1. Freeze contracts and synthetic test cases first
 
@@ -49,3 +49,70 @@ Supplemental reconciliation corrections: SUP-AGE-01 fixed immutable profile anch
 ## Planning provenance and authority
 
 Consolidated October 6, 2026 from the v2 proposed age plan linked in issue #2. Prose spacing has been cleaned; scope/acceptance are retained. Codex led; Opus 5.5 high and Sol 6.1 medium produced initial plans. Opus identified four additional gaps, Codex verified/corrected them and Sol accepted the final plan. Opus final recheck/ballot remained unavailable due quota: this is not two-model consensus or implementation approval. Raw review packets/session logs and family-specific planning are not public repository artifacts. Update this specification and issue together if requirements change.
+
+## Delivered implementation
+
+Implemented by the implementation agent on `feature/private-age-suitability` from baseline `7489735` (historical branch; now part of the combined local candidate on `feature/reviewed-preview-integration`). Everything below uses wholly synthetic profiles and listings; no real profile exists in the repository or its tests.
+
+**Slice A — pure contracts.** `src/age.ts` validates the five profile forms (unknown, exact birthday, birth month/year, birth year, completed years as of a date) against an immutable New York anchor date, and represents every profile as a closed interval of feasible Gregorian birthdays. Arithmetic is integer day numbers; there is no `Date` arithmetic or host-timezone dependence. February 29 birthdays return both common-year anniversary interpretations (February 28 and March 1); a comparison is confirmed only when every feasible birthday and interpretation agree. The 0–25 range is a product input limit: a profile is rejected only when every feasible birthday is outside it.
+
+`src/ageEvidence.ts` (`age-words-v2`, assessment `age-assessment-v2`) keeps executable participant rules, source-described audience hints, supervision conditions and unsupported wording separate, each with field, exact quote and span, plus representation part and content hash in assessments. Supported executable grammar:
+
+- `Ages N-M`, `Ages N to/through M`, `N-M year olds`: inclusive completed years.
+- `Ages N and up/and older`, `Ages N+`, `must be at least N years (old / of age)`, `must be at least age N`, `must be N years or older`: inclusive minimum. An explicit age unit is required.
+- `Ages N and under/and younger`: inclusive maximum.
+- `For / open to / limited to children, kids, youth or participants under N`: exclusive maximum (N-1 completed years).
+- Cutoff: `as of / on / by <Month D, YYYY | YYYY-MM-DD>` directly after the rule, `Age as of …`, `Age cutoff …`.
+- Event reference: `as of / on the first day of class`, `the day of the event` — single nonrecurring event only.
+
+The following is unsupported and retained as written, each with a stable reason code:
+- isolated `N+`;
+- `older than` / `over N`, and `under N` outside the participant phrasing;
+- `must be N` without an age unit;
+- grades, month units, and price/admission tiers;
+- role-ambiguous wording (volunteers, staff, parents/adults before the range);
+- negated or excluding clauses (`not for`, `may not attend`, `except`, …) and recommended or qualified clauses (`recommended for`, `best for`, `suggested`, …), which keep the whole sentence as the quote;
+- several different ranges in one representation;
+- cutoff wording without a rule;
+- numeric slash dates, dates without a year, impossible dates and conflicting cutoffs;
+- `adults only` (no numeric bound).
+
+Numbers followed by a non-age unit (height, weight, counts, durations) are recorded as non-blocking `non-age-quantity` and never become age rules. Every other unsupported entry is *unresolved applicable age wording*: its codes form part of the material facts (`unresolved`). In any representation, it blocks confirmation (status unknown, so never Age fail). A listing with unresolved wording but no supported rule is unknown, not "no rule".
+
+`under N` / `N and under` in a sentence with accompaniment wording becomes a supervision condition, never a participant bound or adults-only. Audience hints (preschool/toddler, children/kids/youth, teens, family, all ages, adults) carry no numbers, never admit or exclude, and are not material facts.
+
+A missing cutoff compares provisionally at the event's source-local start date (a UTC instant uses its New York date) and is never a confirmation, even when far outside. Recurring programs compare only an explicit fixed cutoff, described as meeting or outside that stated rule; first-meeting, session and missing references stay unknown, and attendance and sessions stay unknown. Silence in one feed — no rule and no unresolved age wording — is incomplete corroboration; ambiguous wording is not silence. Different applicable rules or references across feeds are a conflict, and the status stays unknown.
+
+**AGE-010 measurement (performed before claiming coverage).** The extractor was run over all 54 parsed VEVENTs, and every archived SUMMARY/DESCRIPTION was also read manually, in the dated public fixtures (`prcr`, `arts`, `current-prcr`, `current-arts`; captured October 3–6, 2026). Result: 0 executable rules, 0 audience hints, 0 supervision conditions, 0 unsupported age phrases. The only age-adjacent words found in the manual read were incidental ("stage", "three decades of experience", "everyone who loves costumes"). The test `AGE-010 measurement` locks these counts. Measured coverage on real Town wording is therefore **zero**. The supported grammar is proven only on synthetic test sentences; real provider phrasing is unknown until a source with age wording is connected (issue #7). Broader grammar expansion is separate future scope.
+
+**Slice B — private persistence.** The same transactional migration adds append-only `age_profile_revisions` (seeded unknown only when empty), `age_profile_commands` (idempotency receipts keyed by an HMAC with a local random secret; results hold revision IDs only), `age_legacy_birth_date` (raw JSON copy of any non-null legacy `settings.birthDate`, made before settings handling changes), append-only `age_overrides`, `age_rule_state` and `age_attention`. Settings never expose or accept a birthday; an ordinary save writes back the stored legacy value unchanged. Only explicit local confirm (reviewed input → new `legacy-confirm` revision) or discard clears it. Profile commands accept only their known fields and the single local child/household/operator IDs; anything else is rejected before any write, and the IDs are bound into the receipt. They also require the expected current revision; races return 409 with an explicit reload. Item snapshots carry `ageProfile: {revisionId, known, pendingLegacy}` and per-item assessments. Profile fields are served only by `GET /api/profile`. Routes: `GET/POST /api/profile`, `POST /api/profile/legacy`, `POST /api/age-override`, and `age-attention-ack` on `/api/action`. All sit behind the existing loopback / same-origin / JSON / no-store guards, now in `server/app.ts` so they are route-tested without a scan or network.
+
+**Slice C — fit, display, reconsideration, notices, UI.** Material signatures are separate from the full audit identity. `ruleSignature` is profile-independent: normalized bounds, references, conflict and unresolved-wording codes. `outcomeSignature` adds the per-rule comparison and status. `identity` also binds algorithm/extractor/calendar-parser revisions, source version, representation hashes and profile revision.
+
+Stored structures are compared with current ones in canonical semantic form (`canonicalAgeFacts` / `canonicalAgeOutcome`), never by hashes of a particular serialization. This covers baselines, decision bases and Show anyway bases. Fields are picked explicitly, a missing `unresolved` list means none, and a missing top-level comparison is derived from the single compared rule. As a result, state written by an earlier revision (including v1 rows written before outcome columns or `unresolved` existed) and future serialization changes are not material by themselves. Legacy age reviews count only when their key's signature exactly matches a known earlier serialization of the basis they stored. New age reviews record the exact state they acknowledged.
+
+- Only a confirmed `outside` fails the Age rule and places an item in Excluded.
+- Show anyway bypasses only that placement while its basis `outcomeSignature` is current. When a new source version, profile revision or startup recheck finds a material basis change, the lapse is persisted in append-only `age_override_lapses`. The override stays lapsed, with an explanation, even if a later change restores the same outcome; only a fresh Show anyway reactivates placement. Precision-only edits do not lapse it.
+- Wrong-fit passes accept optional `fitDimensions` (too-young/too-old/other). Duplicates and unknown values are rejected, and an empty list is canonical absence, so pre-upgrade receipts replay exactly.
+- Every new decision freezes an age basis (revision IDs and signatures, no birthday).
+- Age reconsideration applies to wrong-fit passes, keyed by the decision plus the current `outcomeSignature`. It is acknowledged only by `reconsider_review` with `reviewKind: 'age'` and the exact key; legacy and attendance reviews cannot clear it, and it cannot clear them.
+- Provider changes that alter `ruleSignature` add an `age rule` field and are critical, under existing creation-time notice eligibility.
+- `age_rule_state` is a private baseline per item: facts, the material outcome, and the profile and assessment revisions they were computed under. It is refreshed on every new source version and every profile revision; profile edits never create attention or notices. On startup, `recheckAgeAssessments` compares current facts and outcome with that baseline for the same source version and profile revision. A material difference can then only be an extractor or comparison-algorithm correction. It creates a local `age_attention` record (old/new revisions, before/after facts and outcome) with no source version or change ID. Surfaced/saved items are eligible with or without a pass, it survives restarts, and it has its own exact acknowledgement. A revision bump with the same material result is a silent no-op.
+- Profile edits never create source notices. Ranking is unchanged.
+
+**Current status.** AGE-010 is complete with zero real Town coverage; real provider phrasing remains unknown, and the synthetic grammar does not prove real-provider coverage.
+
+Coordinator synthetic browser acceptance of the combined candidate passed on October 8, 2026, on unchanged public code `8019865`, at 1280×900 and 390×844 ([summary and limits](../../README.md#validation)). It covered:
+- all five profile kinds, with native/server validation and draft retention/focus;
+- precision and leap bounds, and Settings isolation across restart;
+- each evidence kind, and Excluded inspection;
+- reversible Show anyway and its lapse;
+- wrong fit / too young / too old with exact Undo;
+- two-page profile races, and a pinned-source decision recorded as stale;
+- combined notices with independent acknowledgements;
+- a never-loaded negative control;
+- keyboard focus.
+
+The local correction used a simulated earlier stored baseline with the real startup recheck. Issue #2 stays open; closure is not claimed here.
+
+**Not verified by the implementation agent (historical, at implementation time; browser behavior was later covered by the October 8 acceptance above).** Browser behavior was not exercised: the dev server performs a live source check on first start, and network use was outside this task. The profile editor, pinned dialogs, labels, notices and keyboard focus need coordinator browser QA with synthetic profiles. Passes recorded before this change have no frozen age basis and are not compared for age reconsideration. Algorithm-correction detection was tested by simulating an earlier stored outcome, not by shipping two algorithm versions. Negation/qualification detection is a conservative word list: it can over-block (e.g. "No registration needed for ages 7-10" stays unknown) and cannot prove it catches every phrasing. The live issue body and comments were not read (no network access in this task).

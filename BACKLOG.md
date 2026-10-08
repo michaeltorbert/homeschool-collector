@@ -12,10 +12,10 @@ Eight checks are preserved with concrete acceptance in [reliability/accessibilit
 ## Planned features and gates
 
 - [#1](https://github.com/michaeltorbert/homeschool-collector/issues/1) — Muse-assisted private intake and permitted unattended delivery.
-- [#2](https://github.com/michaeltorbert/homeschool-collector/issues/2) — age/evidence/profile precision and reversible fit feedback; next feature.
-- [#5](https://github.com/michaeltorbert/homeschool-collector/issues/5) — Bounded reversible interest learning.
+- [#2](https://github.com/michaeltorbert/homeschool-collector/issues/2) — age/evidence/profile precision and reversible fit feedback. Local implementation is part of the combined local candidate on `feature/reviewed-preview-integration` ([delivered implementation](docs/plans/age-suitability.md#delivered-implementation)). AGE-010 measured zero real Town age wording. Coordinator synthetic browser acceptance of the combined candidate passed on October 8, 2026 ([summary](README.md#validation)). Synthetic grammar does not prove real-provider coverage. The issue stays open.
+- [#5](https://github.com/michaeltorbert/homeschool-collector/issues/5) — Bounded reversible interest learning. Local implementation is part of the combined local candidate ([delivered implementation](docs/plans/interest-learning.md#delivered-implementation)). Coordinator synthetic browser acceptance of the combined candidate passed on October 8, 2026 ([summary](README.md#validation)). Parent usefulness (#10) is unverified, and the issue stays open.
 - [#6](https://github.com/michaeltorbert/homeschool-collector/issues/6) — Broad concerns/recurring windows.
-- [#7](https://github.com/michaeltorbert/homeschool-collector/issues/7) — Town coverage and complete class/camp route.
+- [#7](https://github.com/michaeltorbert/homeschool-collector/issues/7) — Town coverage and complete class/camp route. A bounded local calendar-evidence candidate is part of the combined local candidate ([candidate and gates](docs/plans/source-and-hosting.md#bounded-calendar-evidence-candidate)). The complete catalog route and its semantics (C03) and the catalog/Wake adapters (C05) remain unmet, and publisher scope is unverified; the issue stays open.
 - [#8](https://github.com/michaeltorbert/homeschool-collector/issues/8) — Optional calendar file.
 - [#9](https://github.com/michaeltorbert/homeschool-collector/issues/9) — Protected Worker/D1/scheduling.
 - [#10](https://github.com/michaeltorbert/homeschool-collector/issues/10) — Usefulness/public-text extraction choice.
