@@ -209,6 +209,40 @@ While off or paused, Interested only saves the bookmark and notes that no signal
 
 These tests do not establish that recommendations are useful; that is the parent pilot ([#10](https://github.com/michaeltorbert/homeschool-collector/issues/10)). A coordinator synthetic two-window browser check ran on earlier source `e877`; it is historical. Coordinator synthetic browser acceptance of these controls on the combined candidate (October 8, 2026) is summarized under [Validation](#validation).
 
+## Public brochure collector — issue #7 scope E01 (intermediate)
+
+**What it is.** The server now collects the Town's published program brochures automatically, with no manual export. On start it checks whether a collection is due, then re-checks hourly. A run is admitted at most once per 24 hours, and each PDF is re-checked at most weekly. The collector reads `robots.txt` first, then the Programs, Summer Camp and Dance pages, then only the `DocumentCenter/View/<id>` PDFs those pages link. The text of each brochure is split into raw program blocks by position (code, heading, age text, schedule lines, location, instructor, fee), and every field points back to its source lines.
+
+**What it is not.** It is not the registration catalog and nothing in it is bookable. Brochures are incomplete and may be out of date. Availability is unknown. Codes are labels, not unique identities. Duplicates stay separate; nothing is merged or inferred, including years, dates, recurrence, eligibility, capacity or sections. Results do not appear in the inbox, age or learning features. Issue #7 stays open. The full contract is in [the source specification](docs/plans/source-and-hosting.md#public-brochure-document-collector-scope-e01-intermediate).
+
+**Safety.**
+- Requests go only to `www.fuquay-varina.org`: ordinary identified GETs, at least 5 seconds apart, with no cookies, logins or retries.
+- Denial, a challenge page, HTML instead of a PDF, or a `robots.txt` prohibition or unreadable policy stops the Town collector permanently. There is no override command.
+- The registration site is never contacted.
+- Evidence lives in the ignored `data/documents.sqlite`, separate from your preview database. Keep it out of Git.
+
+**Use.**
+
+```sh
+npm run documents -- status          # lane state, last run, sources and failures
+npm run documents -- list --q gymnastics --limit 20
+npm run documents -- detail <candidateId>
+npm run documents -- run             # only runs if the same persisted gates allow it
+npm run documents -- reparse         # reprocess stored PDFs locally; no network
+```
+
+The running app also serves read-only JSON at `/api/documents`, `/api/documents/status`, `/api/documents/candidates/<id>` and `/api/documents/sources/<documentId>`. Reading never triggers a check.
+
+**Tests.** The implementation author added synthetic tests in `tests/documents*.test.ts`. They use temporary databases, injected transport and a trapped global `fetch`, and cover:
+- transport categories, caps, timeouts and cancellation;
+- URL, robots and sanitizer rules;
+- positional layouts and quarantine;
+- the real pdf.js worker plus hostile timeout, heap and crash workers;
+- admission, restart, concurrency, sticky stops, retention, quota, replay and reparse;
+- guarded HTTP.
+
+Two tests read the ignored retained public brochure evidence when it is present and are skipped otherwise. The author ran none of these tests, the build or a live collection. Those results are the coordinator's to record.
+
 ## Town calendar evidence — issue #7 (bounded local candidate)
 
 **Status:** a bounded local candidate, now part of the combined local candidate on `feature/reviewed-preview-integration` (draft pull request; not merged or released). Issue [#7](https://github.com/michaeltorbert/homeschool-collector/issues/7) stays open and incomplete. No permitted complete class/camp catalog route is established (C03 unmet), so no catalog or Wake adapter exists (C05 unmet). Publisher scope, horizon and truncation are unverified. The full contract and its limits are in [the source specification](docs/plans/source-and-hosting.md#bounded-calendar-evidence-candidate).
