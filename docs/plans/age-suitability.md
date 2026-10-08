@@ -100,6 +100,19 @@ Stored structures are compared with current ones in canonical semantic form (`ca
 - `age_rule_state` is a private baseline per item: facts, the material outcome, and the profile and assessment revisions they were computed under. It is refreshed on every new source version and every profile revision; profile edits never create attention or notices. On startup, `recheckAgeAssessments` compares current facts and outcome with that baseline for the same source version and profile revision. A material difference can then only be an extractor or comparison-algorithm correction. It creates a local `age_attention` record (old/new revisions, before/after facts and outcome) with no source version or change ID. Surfaced/saved items are eligible with or without a pass, it survives restarts, and it has its own exact acknowledgement. A revision bump with the same material result is a silent no-op.
 - Profile edits never create source notices. Ranking is unchanged.
 
-**Current status.** AGE-010 is complete with zero real Town coverage; real provider phrasing remains unknown. Full synthetic browser acceptance (profile editor, pinned dialogs, labels, notices, keyboard focus) is unverified for the combined candidate, so the closure gate above is not met.
+**Current status.** AGE-010 is complete with zero real Town coverage; real provider phrasing remains unknown, and the synthetic grammar does not prove real-provider coverage.
 
-**Not verified by the implementation agent (historical, at implementation time).** Browser behavior was not exercised: the dev server performs a live source check on first start, and network use was outside this task. The profile editor, pinned dialogs, labels, notices and keyboard focus need coordinator browser QA with synthetic profiles. Passes recorded before this change have no frozen age basis and are not compared for age reconsideration. Algorithm-correction detection was tested by simulating an earlier stored outcome, not by shipping two algorithm versions. Negation/qualification detection is a conservative word list: it can over-block (e.g. "No registration needed for ages 7-10" stays unknown) and cannot prove it catches every phrasing. The live issue body and comments were not read (no network access in this task).
+Coordinator synthetic browser acceptance of the combined candidate passed on October 8, 2026, on unchanged public code `8019865`, at 1280×900 and 390×844 ([summary and limits](../../README.md#validation)). It covered:
+- all five profile kinds, with native/server validation and draft retention/focus;
+- precision and leap bounds, and Settings isolation across restart;
+- each evidence kind, and Excluded inspection;
+- reversible Show anyway and its lapse;
+- wrong fit / too young / too old with exact Undo;
+- two-page profile races, and a pinned-source decision recorded as stale;
+- combined notices with independent acknowledgements;
+- a never-loaded negative control;
+- keyboard focus.
+
+The local correction used a simulated earlier stored baseline with the real startup recheck. Issue #2 stays open; closure is not claimed here.
+
+**Not verified by the implementation agent (historical, at implementation time; browser behavior was later covered by the October 8 acceptance above).** Browser behavior was not exercised: the dev server performs a live source check on first start, and network use was outside this task. The profile editor, pinned dialogs, labels, notices and keyboard focus need coordinator browser QA with synthetic profiles. Passes recorded before this change have no frozen age basis and are not compared for age reconsideration. Algorithm-correction detection was tested by simulating an earlier stored outcome, not by shipping two algorithm versions. Negation/qualification detection is a conservative word list: it can over-block (e.g. "No registration needed for ages 7-10" stays unknown) and cannot prove it catches every phrasing. The live issue body and comments were not read (no network access in this task).

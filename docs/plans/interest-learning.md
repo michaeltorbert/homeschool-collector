@@ -1,6 +1,6 @@
 # Bounded interest learning
 
-Issue [#5](https://github.com/michaeltorbert/homeschool-collector/issues/5). The local implementation described in [Delivered implementation](#delivered-implementation) exists in source (`src/learning.ts`, `server/learning.ts`) and is part of the combined local candidate on `feature/reviewed-preview-integration`. Review, browser QA, integration and closure status are tracked on the issue, not asserted here. Recommendation usefulness is a separate parent pilot outcome ([#10](https://github.com/michaeltorbert/homeschool-collector/issues/10)); tests do not establish it. Age behavior is governed by [age-suitability.md](age-suitability.md). Public starter weights remain neutral; each household sets private priorities.
+Issue [#5](https://github.com/michaeltorbert/homeschool-collector/issues/5). The local implementation described in [Delivered implementation](#delivered-implementation) exists in source (`src/learning.ts`, `server/learning.ts`) and is part of the combined local candidate on `feature/reviewed-preview-integration`. Review, integration and closure status are tracked on the issue, not asserted here; the October 8, 2026 synthetic browser acceptance is summarized [below](#delivered-implementation). Recommendation usefulness is a separate parent pilot outcome ([#10](https://github.com/michaeltorbert/homeschool-collector/issues/10)); tests do not establish it. Age behavior is governed by [age-suitability.md](age-suitability.md). Public starter weights remain neutral; each household sets private priorities.
 
 ## Keep the judgments separate
 
@@ -83,4 +83,14 @@ Source and age notices, Show anyway, reconsiderations and acknowledgements are u
 - **Combined attention:** an eligible provider schedule notice and an eligible local age-extractor correction stay pending, with the same IDs, through Interested, regroup, an explicit instruction, a Generally pass, Hide, Undo, Unsave, reset, pause and restart. Source review clears only its exact change IDs and age attention only its exact key. Changes created while a listing was unsaved and unseen stay ineligible after later Interested; a new change after it is eligible.
 - **HTTP:** loopback guards, no-store, 409 reloads (including a stale Generally), no echo and no external fetch.
 
-These tests do not show that recommendations are useful. That remains a parent pilot outcome. A coordinator synthetic two-window browser check of these controls ran on earlier source `e877`; it is historical and does not prove the current combined tree. Current browser acceptance is unverified. Native-device and visual verdicts need their own evidence.
+These tests do not show that recommendations are useful. That remains a parent pilot outcome. A coordinator synthetic two-window browser check of these controls ran on earlier source `e877`; it is historical.
+
+Coordinator synthetic browser acceptance of the combined candidate passed on October 8, 2026, on unchanged public code `8019865`, at 1280×900 and 390×844 ([summary and limits](../../README.md#validation)). It covered:
+- off/opt-in with no backfill, the three-group minimum, bounded lift, same-program and fourth-group behavior;
+- explicit-first ranking with tie-only lift, and instruction precedence;
+- no implicit negatives; Unsave versus Undo; pause and resume;
+- the frozen Clear boundary across restart; Reset Cancel and Confirm;
+- frozen attribution, regroup, re-record and exact Undo;
+- all eight two-page Preferences/Generally conflict combinations, before and after polling.
+
+The browser checked only the unsure certainty after regroup and re-record, not program-group identity. The generic cap, ceiling, retries, duplicate-item and occupied-group restoration remain unit/HTTP evidence. Native-device and accessibility verdicts need their own evidence.

@@ -63,7 +63,48 @@ Ranking is transparent word matching, not a validated prediction of usefulness. 
 
 157 passing tests (42 baseline, 36 age/suitability, 37 interest-learning and 42 Town calendar evidence tests described below) cover archive counts and links, empty/challenge/invalid responses, timezone registry isolation, DST, all-day end semantics, fall versus December Saturdays, ongoing/unknown attendance, synthetic age uncertainty, recurrence quarantine, hostile URLs/markup, ranking cap, replay/payload conflicts, expired/stale fences, old imports, failure retention, transaction rollback, exact review races, saved/hidden and actually surfaced notices, feed conflict provenance and saved warnings for nonselected conflicting cancellations/schedules, source absence, parser rollback/reprocessing and acquisition-health preservation, raw retention and actual file-backed close/reopen persistence, unchanged-schedule native-URL updates from real saved/current feeds, and creation-time notice relevance. `npm run build` checks types and builds the production client.
 
-The parent agent performed separate desktop and 390-pixel mobile browser QA: actual layout/detail inspection; search, category and date filters; four closures and three known excluded entries; interest persistence across reload/restart; independent Hide/Restore; exact review; keyboard focus trap/Escape/focus return; no mobile horizontal overflow; and an unsaved preference draft surviving a 16-second polling cycle. Six actual API rejection checks passed (cross-origin read/write, absent Origin, non-JSON mutation, cross-site fetch, and a raw unsupported Host); the valid read returned 200 with no-store. These are parent-run checks, not tests executed by the implementation agent. Browser checks used temporary choices and separate synthetic fixtures; runtime test history is excluded from the repository. Unit/replay/browser checks do not establish native calendar import, hosting, catalog completeness, long-term reliability or family usefulness.
+**Combined-candidate browser acceptance (October 8, 2026).** On unchanged public code `8019865`, the coordinator ran 157/157 tests and the TypeScript/Vite build. It then ran synthetic-only Chrome/Chromium acceptance at 1280×900 and 390×844.
+
+*Isolation.* An ignored QA harness served fresh synthetic databases from the production build on loopback, with a fixed test clock (January 1, 2079, New York) and invented June 2080 listings. No household database, private profile, live source check or external browser/source contact was used. QA scripts, data and captures stay outside Git.
+- The browser blocked every non-loopback request and every WebSocket.
+- The server trapped fetch, WebSocket and http(s) before connecting, and recorded zero outbound sends. Raw sockets are not trapped.
+- An initial Vite dev-server attempt failed this gate (its dev WebSocket was blocked) and is kept as a failure.
+- Every case verified that the browser was launched muted. There are no sound tests.
+
+*Results.*
+- **Age:**
+  - all five profile kinds, native and server validation with focus and draft retention, precision and leap-day bounds, and Settings isolation across restart;
+  - confirmed, provisional, audience-hint, conflicting, unsupported and recurring age evidence;
+  - Excluded inspection, reversible age-only Show anyway and its lapse;
+  - wrong fit / too young / too old with exact Undo;
+  - two-page profile races with real 409 rejections that keep the draft;
+  - a decision on shown source version 1 recorded as stale while version 2 was current;
+  - combined source, local-correction, timing and age-fit notices that survived Hide/Restore, a Generally pass and Undo, Unsave, Reset, Pause and restart, then cleared by four independent acknowledgements;
+  - a never-loaded listing that stayed ineligible for notices after a later save.
+- **Learning:**
+  - off by default, opt-in, no backfill;
+  - two distinct groups and an unsure third insufficient; a regroup reaching the minimum three with a bounded +2 lift; the same program counted once; a fourth group not inflating the lift;
+  - explicit score first, with learned lift used only to break ties; child > household > Settings, with unrelated topics unchanged;
+  - no implicit negative from timing, fit, concern or listing-only passes, Hide, review or silence;
+  - Unsave keeps the signal and Undo keeps the bookmark; pause and resume without backfill;
+  - a frozen manual-Clear boundary through supersession, Undo and restart;
+  - Reset Cancel writes nothing; Confirm starts a new period and keeps settings, instructions, bookmarks, passes and history;
+  - after a source change the attribution stays frozen on version 1, regroup keeps it, re-record previews and confirms the version 2 Science/Crafts 50:50 split, and exact Undo restores the earlier signals in order.
+- **Two-page conflicts:** all eight combinations passed: Preferences or Generally drafts, against a manual instruction or against another listing's Generally pass, before and after polling.
+  - Before polling: a real 409, no write, draft kept.
+  - After polling: submission disabled, draft kept. The complementary cells also counted that no request was sent.
+  - Also exercised: deliberate Review current value, and exact Undo that keeps newer instructions.
+- **Keyboard and layout:** initial focus, native Tab wrap, and Escape/Close returning focus to the trigger passed at both widths, with no horizontal page overflow. The mobile learning table scrolls inside its own container, and its right-hand Applies/Learned columns were checked in view.
+- **Audit:** 1,604 browser events, including those between cases, with zero unexpected errors. The deliberate negatives (one controlled source-check 500, validation 400s and conflict 409s) were declared and matched individually. The request inventory counts methods and paths; it is not a full transcript.
+
+*Limits.*
+- The local age correction came from a simulated earlier stored baseline followed by the real startup recheck, not from two shipped algorithm versions.
+- The supported age grammar is proven only on synthetic sentences; real Town age-wording coverage stays zero.
+- The generic cap of 8, the ceiling of 10, retries, duplicate-item records and occupied-group restoration are unit/HTTP evidence.
+- Several cases first failed because of test-driver defects: an absolute history count, a subpixel capture tolerance, an ambiguous selector, a capture anchor, a stale pinned dialog opened before a poll, and an over-strict stage field check. Each failure is kept, and the case was completed by a repaired or guarded continuation. No product defect or product change was needed. Two early list images were overwritten before capture hashing was added; the final proof uses later archived captures.
+- No native-device, screen-reader, whole-app accessibility, usefulness, hosting or catalog claim is made.
+
+**Historical (earlier baseline).** The parent agent performed separate desktop and 390-pixel mobile browser QA: actual layout/detail inspection; search, category and date filters; four closures and three known excluded entries; interest persistence across reload/restart; independent Hide/Restore; exact review; keyboard focus trap/Escape/focus return; no mobile horizontal overflow; and an unsaved preference draft surviving a 16-second polling cycle. Six actual API rejection checks passed (cross-origin read/write, absent Origin, non-JSON mutation, cross-site fetch, and a raw unsupported Host); the valid read returned 200 with no-store. These are parent-run checks, not tests executed by the implementation agent. Browser checks used temporary choices and separate synthetic fixtures; runtime test history is excluded from the repository. Unit/replay/browser checks do not establish native calendar import, hosting, catalog completeness, long-term reliability or family usefulness.
 
 ## Remaining work
 
@@ -71,7 +112,7 @@ Stages 1–3 now have a usable local path, subject to parent pilot feedback. See
 
 ## Implementation provenance
 
-The local preview foundation was implemented under Codex's lead, with independent Claude Opus code review and separate browser QA. Claude wrote the later age (#2), interest-learning (#5) and calendar-evidence (#7) increments, which received independent Sol review before integration. Review of the combined candidate on `feature/reviewed-preview-integration` is recorded on its draft pull request. Reviews and tests establish the stated local behavior, not hosted operation or family usefulness.
+The local preview foundation was implemented under Codex's lead, with independent Claude Opus code review and separate browser QA. Claude wrote the later age (#2), interest-learning (#5) and calendar-evidence (#7) increments, which received independent Sol review before integration. Review of the combined candidate on `feature/reviewed-preview-integration` is recorded on its draft pull request. Browser-acceptance planning and reconciliation for the combined candidate were completed by fresh Sol and Claude Opus planners. A separate fresh Claude session wrote the ignored QA harness and drivers. An independent Sol reviewer examined them and the actual captures. The coordinator ran every check. Reviews and tests establish the stated local behavior, not hosted operation or family usefulness.
 
 Visual thesis: a calm cream-and-ink editorial inbox with a single green action accent. Content plan: scope/freshness, inbox navigation, readable event rows, evidence/rule/change inspector, source health and preferences. Interaction thesis: restrained row entrance, short drawer transition and clear hover/focus affordances; reduced motion removes animations.
 
@@ -136,7 +177,7 @@ These keep the listing at "needs checking". Height, weight and count limits are 
 - loopback HTTP routes: guards, no-store, 409 reloads, no response or log echo, no external `fetch`;
 - the ignored/untracked database, WAL and SHM paths.
 
-The implementation agent did not check browser behavior of the profile editor, labels and dialogs. Full synthetic browser acceptance remains unverified.
+Historical: the implementation agent did not check the browser behavior of the profile editor, labels and dialogs at implementation time. Coordinator synthetic browser acceptance of the combined candidate (October 8, 2026) is summarized under [Validation](#validation).
 
 ## Bounded interest learning — issue #5
 
@@ -166,7 +207,7 @@ While off or paused, Interested only saves the bookmark and notes that no signal
 - file-backed migration, restart and two connections;
 - loopback HTTP.
 
-These tests do not establish that recommendations are useful; that is the parent pilot ([#10](https://github.com/michaeltorbert/homeschool-collector/issues/10)). A coordinator synthetic two-window browser check ran on earlier source `e877`; it is historical and does not prove the current tree. Current browser acceptance of these controls is unverified.
+These tests do not establish that recommendations are useful; that is the parent pilot ([#10](https://github.com/michaeltorbert/homeschool-collector/issues/10)). A coordinator synthetic two-window browser check ran on earlier source `e877`; it is historical. Coordinator synthetic browser acceptance of these controls on the combined candidate (October 8, 2026) is summarized under [Validation](#validation).
 
 ## Town calendar evidence — issue #7 (bounded local candidate)
 
